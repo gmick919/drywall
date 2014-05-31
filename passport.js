@@ -1,6 +1,6 @@
 'use strict';
 
-exports = module.exports = function(app, passport) {
+exports = module.exports = function(app, passport, express) {
   var LocalStrategy = require('passport-local').Strategy,
       TwitterStrategy = require('passport-twitter').Strategy,
       GitHubStrategy = require('passport-github').Strategy,
@@ -118,18 +118,54 @@ exports = module.exports = function(app, passport) {
     ));
   }
 
+  var socketPassport = require('passport.socketio');
+
+  app.io.set('authorization', socketPassport.authorize({
+    cookieParser: app.cookieParser, //eis!!! express.cookieParser,
+    //eis!!! key: 'connect.sid',
+    key: 'connect.sid', //eis!!!
+    //eis!!! secret: app.get('crypto-key'),
+    secret: 'secret', //eis!!!
+    store: app.sessionStore,
+    fail: function(data, accept) {
+
+        console.log("eis 3: fail: accept:" + accept);
+
+        if (typeof accept != "function") return; //eis!!!
+        accept(null, false);
+    },
+    success: function(data, accept) {
+
+        console.log("eis 3: success");
+
+        accept(null, true);
+    }
+  }));
+
   passport.serializeUser(function(user, done) {
     done(null, user._id);
   });
 
   passport.deserializeUser(function(id, done) {
+
+    console.log("eis 8: id: " + id);
+      //eis!!!...
+      app.db.models.User.findOne({ _id: id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
+          console.log("eis 9: user: " + user);
+      });
+      //...eis!!!
+
     app.db.models.User.findOne({ _id: id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
       if (user && user.roles && user.roles.admin) {
         user.roles.admin.populate("groups", function(err, admin) {
+          console.log("eis 10: user: " + user);
+          console.log("eis 11: done: " + done);
           done(err, user);
         });
       }
       else {
+        console.log("eis 10: user: " + user);
+        console.log("eis 11: done: " + done);
         done(err, user);
       }
     });

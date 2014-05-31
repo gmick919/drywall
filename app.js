@@ -20,6 +20,9 @@ app.config = config;
 //setup the web server
 app.server = http.createServer(app);
 
+//setup socket.io
+app.io = require('socket.io').listen(app.server);
+
 //setup mongoose
 app.db = mongoose.createConnection(config.mongodb.uri);
 app.db.on('error', console.error.bind(console, 'mongoose connection error: '));
@@ -42,13 +45,31 @@ app.use(require('compression')());
 app.use(require('serve-static')(path.join(__dirname, 'public')));
 app.use(require('body-parser')());
 app.use(require('method-override')());
-app.use(require('cookie-parser')());
+//eis!!! app.use(require('cookie-parser')());
+//eis!!!...
+app.cookieParser = require('cookie-parser');
+app.use(app.cookieParser('secret'));
+//app.use(app.cookieParser());
+//...eis!!!
+
+//eis!!! app.sessionStore = new mongoStore({ url: config.mongodb.uri }); //eis!!!
+app.sessionStore = new mongoStore({ url: "localhost/drywall/sessions" }); //eis!!!
+
 app.use(session({
-  secret: config.cryptoKey,
-  store: new mongoStore({ url: config.mongodb.uri })
+  //eis!!! secret: config.cryptoKey,
+  secret: 'secret', //eis!!!
+  //eis!!! store: new mongoStore({ url: config.mongodb.uri })
+  key: 'connect.sid', //eis!!!
+  store: app.sessionStore //eis!!!
 }));
 app.use(passport.initialize());
-app.use(passport.session());
+//eis!!! app.use(passport.session());
+app.use(passport.session({ //eis!!!
+    secret: 'secret',
+    key: 'connect.sid',
+    store: app.sessionStore
+}));
+
 helmet.defaults(app);
 
 //response locals
@@ -66,10 +87,13 @@ app.locals.copyrightName = app.config.companyName;
 app.locals.cacheBreaker = 'br34k-01';
 
 //setup passport
-require('./passport')(app, passport);
+require('./passport')(app, passport, express);
 
 //setup routes
 require('./routes')(app, passport);
+
+//route sockets
+require('./sockets')(app);
 
 //custom (friendly) error handler
 app.use(require('./views/http/index').http500);
