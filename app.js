@@ -45,27 +45,19 @@ app.use(require('compression')());
 app.use(require('serve-static')(path.join(__dirname, 'public')));
 app.use(require('body-parser')());
 app.use(require('method-override')());
-//eis!!! app.use(require('cookie-parser')());
-//eis!!!...
 app.cookieParser = require('cookie-parser');
-app.use(app.cookieParser('secret'));
-//app.use(app.cookieParser());
-//...eis!!!
+app.use(app.cookieParser('mesecretstgergtrhny6'));
 
-//eis!!! app.sessionStore = new mongoStore({ url: config.mongodb.uri }); //eis!!!
-app.sessionStore = new mongoStore({ url: "localhost/drywall/sessions" }); //eis!!!
+app.sessionStore = new mongoStore({ url: config.mongodb.uri + "/sessions" });
 
 app.use(session({
-  //eis!!! secret: config.cryptoKey,
-  secret: 'secret', //eis!!!
-  //eis!!! store: new mongoStore({ url: config.mongodb.uri })
-  key: 'connect.sid', //eis!!!
-  store: app.sessionStore //eis!!!
+  secret: 'mesecretstgergtrhny6',
+  key: 'connect.sid',
+  store: app.sessionStore
 }));
 app.use(passport.initialize());
-//eis!!! app.use(passport.session());
-app.use(passport.session({ //eis!!!
-    secret: 'secret',
+app.use(passport.session({
+    secret: 'mesecretstgergtrhny6',
     key: 'connect.sid',
     store: app.sessionStore
 }));

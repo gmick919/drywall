@@ -121,23 +121,14 @@ exports = module.exports = function(app, passport, express) {
   var socketPassport = require('passport.socketio');
 
   app.io.set('authorization', socketPassport.authorize({
-    cookieParser: app.cookieParser, //eis!!! express.cookieParser,
-    //eis!!! key: 'connect.sid',
-    key: 'connect.sid', //eis!!!
-    //eis!!! secret: app.get('crypto-key'),
-    secret: 'secret', //eis!!!
+    cookieParser: app.cookieParser,
+    key: 'connect.sid',
+    secret: 'mesecretstgergtrhny6',
     store: app.sessionStore,
-    fail: function(data, accept) {
-
-        console.log("eis 3: fail: accept:" + accept);
-
-        if (typeof accept != "function") return; //eis!!!
+    fail: function(data, message, error, accept) {
         accept(null, false);
     },
     success: function(data, accept) {
-
-        console.log("eis 3: success");
-
         accept(null, true);
     }
   }));
@@ -147,25 +138,13 @@ exports = module.exports = function(app, passport, express) {
   });
 
   passport.deserializeUser(function(id, done) {
-
-    console.log("eis 8: id: " + id);
-      //eis!!!...
-      app.db.models.User.findOne({ _id: id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
-          console.log("eis 9: user: " + user);
-      });
-      //...eis!!!
-
     app.db.models.User.findOne({ _id: id }).populate('roles.admin').populate('roles.account').exec(function(err, user) {
       if (user && user.roles && user.roles.admin) {
         user.roles.admin.populate("groups", function(err, admin) {
-          console.log("eis 10: user: " + user);
-          console.log("eis 11: done: " + done);
           done(err, user);
         });
       }
       else {
-        console.log("eis 10: user: " + user);
-        console.log("eis 11: done: " + done);
         done(err, user);
       }
     });
