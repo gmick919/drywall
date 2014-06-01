@@ -5,9 +5,13 @@ block head
 
 block neck
   link(rel='stylesheet', href='/views/about/index.min.css?#{cacheBreaker}')
+  link(rel='stylesheet', href='/nlp/nlp.css?#{cacheBreaker}')
 
 block feet
   script(src='/socket.io/socket.io.js')
+  script(src='/nlp/bridge.js?#{cacheBreaker}')
+  script(src='/nlp/article.js?#{cacheBreaker}')
+  script(src='/nlp/nlp.js?#{cacheBreaker}')
   script(src='/views/chat/index.js?#{cacheBreaker}')
 
 block body

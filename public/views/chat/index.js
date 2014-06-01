@@ -5,9 +5,18 @@ var socket;
 (function() {
     'use strict';
 
+$(function () {
+
+    window.poly.analyzedArticle = [];
+    window.poly.handleArticleEvents('#chatBox');
+
     var addChatMessage = function(data) {
-        $('<div/>', { text: data }).appendTo('#chatBox');
+        var block = $('<div class="poly-block"/>').appendTo('#chatBox').text(data);
         $("#chatBox").animate({ scrollTop: $('#chatBox')[0].scrollHeight}, 500);
+        window.poly.analyze(block[0], null, function (analyzed) {
+            window.poly.analyzedArticle.push(analyzed);
+        });
+
     };
 
     socket = io.connect();
@@ -53,4 +62,6 @@ var socket;
     $(document).ready(function() {
         app.chatForm = new app.ChatForm();
     });
+});
+
 }());
