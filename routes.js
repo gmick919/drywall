@@ -34,6 +34,7 @@ exports = module.exports = function(app, passport) {
   app.get('/about/', require('./views/about/index').init);
   app.get('/contact/', require('./views/contact/index').init);
   app.post('/contact/', require('./views/contact/index').sendMessage);
+  app.get('/chat/', require('./views/chat/index').init);
 
   //sign up
   app.get('/signup/', require('./views/signup/index').init);

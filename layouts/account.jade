@@ -11,8 +11,8 @@ html
       div.container
         div.navbar-header
           a.navbar-brand(href='/account/')
-            img.navbar-logo(src='/media/logo-symbol-64x64.png')
-            span.navbar-brand-label #{projectName}
+            img.navbar-logo(src='/media/logo-symbol-64x64.jpg')
+            span.navbar-brand-label Brainglass
           button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
             span.icon-bar
             span.icon-bar
@@ -21,6 +21,7 @@ html
           ul.nav.navbar-nav
             li: a(href='/account/') My Account
             li: a(href='/account/settings/') Settings
+            li: a(href='/chat/') Chat
           ul.nav.navbar-nav.pull-right
             li: a(href='/logout/')
               i.fa.fa-user

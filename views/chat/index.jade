@@ -1,0 +1,27 @@
+extends ../../layouts/default
+
+block head
+  title Chat
+
+block neck
+  link(rel='stylesheet', href='/views/about/index.min.css?#{cacheBreaker}')
+
+block feet
+  script(src='/socket.io/socket.io.js')
+  script(src='/views/chat/index.js?#{cacheBreaker}')
+
+block body
+  div.row
+    div.col-sm-6
+      div.page-header
+        h1 Chat
+      div#chatBox.well
+      div#chatForm
+
+  script(type='text/template', id='tmpl-chatForm')
+    form
+      div.form-group
+        div.input-group
+          input.form-control(type='text', name='message', placeholder='enter a message')
+          span.input-group-btn
+            button.btn.btn-primary.btn-chat Send
