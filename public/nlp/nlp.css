@@ -14,3 +14,11 @@ span.poly-out-of-vocab { color: darkred; }
 span.poly-rare { color: #585858; }
 span.poly-very-rare { color: #989898; }
 span.poly-topic-word { border-radius: 0.5em; border-style: solid; border-width: 2px; border-color: blue }
+
+.panel-info { width: 30%; display: none }
+.panel-title { text-align: center }
+
+.close {
+    margin: -2px 0 0 10px;
+    font-size: 18px;
+}

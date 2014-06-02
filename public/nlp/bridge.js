@@ -435,7 +435,9 @@ window.poly.native.alert = function(msg) {
 
 window.poly.native.wordPopup = function(msg) {
   if (!window.cordova) {
-      alert(msg);
+      $("#dictPanel").show();
+      msg = msg.replace(/\n/g, "<br/>");
+      $("#dictPanel .panel-body").html(msg);
       return;
   }
   cordova.exec(funcStub, funcStub, "ME", "wordPopup", [msg]);

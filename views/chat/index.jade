@@ -12,6 +12,7 @@ block feet
   script(src='/nlp/bridge.js?#{cacheBreaker}')
   script(src='/nlp/article.js?#{cacheBreaker}')
   script(src='/nlp/nlp.js?#{cacheBreaker}')
+  script(src='/vendor/poly/draggable.js?#{cacheBreaker}')
   script(src='/views/chat/index.js?#{cacheBreaker}')
 
 block body
@@ -29,3 +30,10 @@ block body
           input.form-control(type='text', name='message', placeholder='enter a message')
           span.input-group-btn
             button.btn.btn-primary.btn-chat Send
+
+  div#dictPanel.panel.panel-info
+    div.panel-heading
+      h3.panel-title Translation
+        div.btn-group.pull-right
+          button#closeDictPanel.btn.close ×
+    div.panel-body
